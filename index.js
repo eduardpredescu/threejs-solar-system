@@ -10,7 +10,9 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, w / h, 0.01, 10000);
 camera.position.set(400, 400, 400);
 camera.lookAt(scene.position);
-new THREE.OrbitControls(camera);
+const controls = new THREE.OrbitControls(camera);
+
+controls.maxDistance = 900;
 
 const light = new THREE.PointLight(0xffffff, 5, 1000);
 scene.add(light);
