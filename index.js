@@ -17,16 +17,13 @@ controls.maxDistance = 900;
 const light = new THREE.PointLight(0xffffff, 5, 1000);
 scene.add(light);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5, 1000);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1, 5);
 scene.add(ambientLight);
 
 document.body.appendChild(renderer.domElement);
 const loader = new THREE.ObjectLoader();
 
 loader.load('./assets/sun.json', (object) => {
-  object.scale.x = 0.5;
-  object.scale.y = 0.5;
-  object.scale.z = 0.5;
   scene.add(object);
 });
 
@@ -132,23 +129,25 @@ const createRings = (radius, texturePath, xPos, yPos, zPos, rotateX, scene) => {
   });
 }
 
-createPlanet(0.25, './assets/mercury.jpg', 10.8, 0, 10.8, scene, 'Mercury');
-createPlanet(0.6, './assets/venus.jpg', -15.8, 0, 15.8, scene, 'Venus');
-createPlanet(0.63, './assets/earth.jpg', 19.9, 0, -19.9, scene, 'Earth');
-createPlanet(0.33, './assets/mars.jpg', -27.8, 0, 27.8, scene, 'Mars');
-createPlanet(7, './assets/jupiter.jpg', 82.9, 0, 82.9, scene, 'Jupiter');
-createPlanet(5.9, './assets/saturn.jpg', -129.3, 0, 129.3, scene, 'Saturn');
-createPlanet(2.5, './assets/uranus.jpg', 162.1, 0, 162.1, scene, 'Uranus');
-createPlanet(2.46, './assets/neptune.jpg', -254.5, 0, 254.5, scene, 'Neptune');
-createPlanet(0.12, './assets/pluto.jpg', -305, 0, 305, scene, 'Pluto');
-createRings(5.9, './assets/saturn-rings.png', -129.3, 0, 129.3, Math.PI / 3, scene);
+createPlanet(0.25, './assets/mercury.jpg', 20.8, 0, 20.8, scene, 'Mercury');
+createPlanet(0.6, './assets/venus.jpg', -35.8, 0, 35.8, scene, 'Venus');
+createPlanet(0.63, './assets/earth.jpg', 39.9, 0, -39.9, scene, 'Earth');
+createPlanet(0.33, './assets/mars.jpg', -47.8, 0, 47.8, scene, 'Mars');
+createPlanet(7, './assets/jupiter.jpg', 102.9, 0, 102.9, scene, 'Jupiter');
+createPlanet(5.9, './assets/saturn.jpg', -149.3, 0, 149.3, scene, 'Saturn');
+createPlanet(2.5, './assets/uranus.jpg', 182.1, 0, 182.1, scene, 'Uranus');
+createPlanet(2.46, './assets/neptune.jpg', -274.5, 0, 274.5, scene, 'Neptune');
+createPlanet(0.12, './assets/pluto.jpg', -325, 0, 325, scene, 'Pluto');
+createRings(5.9, './assets/saturn-rings.png', -149.3, 0, 149.3, Math.PI / 3, scene);
 
 const gui = new dat.GUI();
 const appClass = function () {
   this.speed = 0.001;
+  this.displayText = true;
 }
 const appInstance = new appClass();
-const controller = gui.add(appInstance, 'speed', 0, 0.01);
+gui.add(appInstance, 'speed', 0, 0.01);
+gui.add(appInstance, 'displayText')
 let counter = 0;
 
 const updateParticles = () => {
@@ -169,6 +168,7 @@ const render = () => {
     item.planet.rotation.y += 0.01;
     item.planet.position.set(item.x * Math.sin(counter), 0, item.z * Math.cos(counter));
     item.text.position.set(item.x * Math.sin(counter) - 5, item.y + 10, item.z * Math.cos(counter));
+    item.text.visible = appInstance.displayText;
   });
   rings.forEach(item => {
     item.ring.rotation.z += 0.01;
